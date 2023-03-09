@@ -1,7 +1,7 @@
 import functools
 
-from .user import User
-from . import db
+from flaskr.user import User
+from flaskr import db
 from flask import Blueprint, jsonify, request, abort, session, g
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -75,13 +75,13 @@ def login():
         error_string = "user {} not found".format(username)
         abort(400, {'error': error_string})
 
-    if not check_password_hash(user['password_hash'], password):
+    if not check_password_hash(user.password_hash, password):
         error_string = "user {}'s password don't match".format(username)
         abort(400, {'error': error_string})
 
     # Set cookie to login the browser.
     session.clear()
-    session['user_id'] = user['id']
+    session['user_id'] = user.id
     return jsonify()
 
 
