@@ -1,14 +1,14 @@
 import os
 import sqlite3
 
+from .error import bad_request
 from flask import Flask
-
-from . import auth
 from flask_sqlalchemy import SQLAlchemy
 
-# Needs to be declared before the app factory runs so that it could be linked with one instance of an app.
+# Needs to be initialized before all users of "db".
 db = SQLAlchemy()
 
+from . import auth
 
 def create_app(test_config=None):
     # Create and config the app.
@@ -31,6 +31,9 @@ def create_app(test_config=None):
         with app.app_context():
             print("Creating new DB")
             db.create_all()
+
+    # Register error handlers across blueprints.
+    app.register_error_handler(400, bad_request)
 
     # Register auth related routes.
     app.register_blueprint(auth.bp)
