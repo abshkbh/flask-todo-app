@@ -1,14 +1,14 @@
 import os
 import sqlite3
 
-from .error import bad_request
 from flask import Flask
+from flaskr.error import bad_request
 from flask_sqlalchemy import SQLAlchemy
 
 # Needs to be initialized before all users of "db".
 db = SQLAlchemy()
 
-from . import auth
+from flaskr import auth
 
 def create_app(test_config=None):
     # Create and config the app.
