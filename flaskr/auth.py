@@ -1,6 +1,6 @@
 import functools
 
-from flaskr.user import User
+from flaskr.schema import User
 from flaskr import db
 from flask import Blueprint, jsonify, request, abort, session, g
 from werkzeug.security import generate_password_hash, check_password_hash
