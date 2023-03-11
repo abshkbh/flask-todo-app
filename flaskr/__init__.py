@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 # Needs to be initialized before all users of "db".
 db = SQLAlchemy()
 
+from flaskr import todos
 from flaskr import auth
 
 def create_app(test_config=None):
@@ -37,5 +38,8 @@ def create_app(test_config=None):
 
     # Register auth related routes.
     app.register_blueprint(auth.bp)
+
+    # Register todos related routes.
+    app.register_blueprint(todos.bp)
 
     return app
