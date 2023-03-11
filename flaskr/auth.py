@@ -1,6 +1,6 @@
 import functools
 
-from flaskr.schema import User
+from flaskr.schema import AppUser
 from flaskr import db
 from flask import Blueprint, jsonify, request, abort, session, g
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -25,12 +25,12 @@ def login_required(view):
 def load_logged_in_user():
     """If a user id is stored in the session, load the user object from
     the database into ``g.user``."""
-    user_id = session.get("user_id")
+    app_user_id = session.get("app_user_id")
 
-    if user_id is None:
+    if app_user_id is None:
         g.user = None
     else:
-        g.user = User.query.filter_by(id=user_id).first()
+        g.user = AppUser.query.filter_by(id=app_user_id).first()
 
 
 @bp.route('/register', methods=['POST'])
@@ -48,8 +48,8 @@ def register():
     if not password:
         abort(400, {'error': 'no password'})
 
-    user = User(username=username,
-                password_hash=generate_password_hash(password))
+    user = AppUser(username=username,
+                   password_hash=generate_password_hash(password))
     db.session.add(user)
     db.session.commit()
     return jsonify()
@@ -70,7 +70,7 @@ def login():
     if not password:
         abort(400, {'error': 'no password'})
 
-    user = User.query.filter_by(username=username).first()
+    user = AppUser.query.filter_by(username=username).first()
     if not user:
         error_string = "user {} not found".format(username)
         abort(400, {'error': error_string})
@@ -81,7 +81,7 @@ def login():
 
     # Set cookie to login the browser.
     session.clear()
-    session['user_id'] = user.id
+    session['app_user_id'] = user.id
     return jsonify()
 
 

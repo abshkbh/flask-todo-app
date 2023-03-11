@@ -15,8 +15,8 @@ def create_app(test_config=None):
     # Create and config the app.
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(SECRET_KEY='dev', DB_FILE_NAME='flaskr.db')
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
-        app.config['DB_FILE_NAME']
+    # Note URL should start with postgresql:// vs postgres://.
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://johndoe65535:ZleLGaC6pIDMQ40BgDYtG1YgRd2eYXEh@dpg-cg5sfkl269v5l63v3meg-a.oregon-postgres.render.com/maverick_flask_todo_db'
 
    # Ensure the instance folder exists.
     try:

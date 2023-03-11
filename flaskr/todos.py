@@ -1,4 +1,4 @@
-from flaskr.schema import Todos
+from flaskr.schema import Todo
 from flaskr.auth import login_required
 from flaskr import db
 from flask import Blueprint, jsonify, request, abort, g
@@ -18,7 +18,7 @@ def add():
     if not content:
         abort(400, {'error': 'no content'})
 
-    todo = Todos(content=content, user_id=g.user.id)
+    todo = Todo(content=content, app_user_id=g.user.id)
     db.session.add(todo)
     db.session.commit()
     return jsonify()
@@ -28,6 +28,7 @@ def add():
 @login_required
 def list():
     """Returns all todos for the registered user."""
-    todos = Todos.query.filter_by(user_id=g.user.id).all()
+    todos = Todo.query.filter_by(app_user_id=g.user.id).all()
+    # This returns a list of dicts.
     todos_json = [todo.get_json_dict() for todo in todos]
     return jsonify({'todos': todos_json})
