@@ -1,15 +1,16 @@
+from flaskr import todos
+from flaskr import auth
 import os
 import sqlite3
 
 from flask import Flask
 from flaskr.error import bad_request
 from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import JWTManager
 
 # Needs to be initialized before all users of "db".
 db = SQLAlchemy()
 
-from flaskr import todos
-from flaskr import auth
 
 def create_local_db_if_not_present(app, dbase):
     """
@@ -37,6 +38,12 @@ def create_app():
 
     # Hook up the database to the app. This will be used for ORMs.
     db.init_app(app)
+
+    # Set up JWT based token management.
+    #
+    # TODO: Figure out if this should be initialized here or in todos.py or in a separate module
+    # altogether.
+    jwt = JWTManager(app)
 
     if app.config['USE_LOCAL_DB']:
         create_local_db_if_not_present(app, db)
