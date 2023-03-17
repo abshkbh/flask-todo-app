@@ -2,7 +2,7 @@ from flaskr import db
 
 
 class Cxn(db.Model):
-    """ Represents a TODO.
+    """ Represents a websocket connection of a user to a server.
     TODO: Defining |Cxn| in a separate file causes a circular dependency."""
     __tablename__ = 'cxn'
     id = db.Column(db.Integer, primary_key=True)

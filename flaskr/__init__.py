@@ -1,5 +1,3 @@
-from flaskr import todos
-from flaskr import auth
 import os
 import sqlite3
 
@@ -11,6 +9,8 @@ from flask_jwt_extended import JWTManager
 # Needs to be initialized before all users of "db".
 db = SQLAlchemy()
 
+from flaskr import auth
+from flaskr import location
 
 def create_local_db_if_not_present(app, dbase):
     """
@@ -41,7 +41,7 @@ def create_app():
 
     # Set up JWT based token management.
     #
-    # TODO: Figure out if this should be initialized here or in todos.py or in a separate module
+    # TODO: Figure out if this should be initialized here or in location.py or in a separate module
     # altogether.
     jwt = JWTManager(app)
 
@@ -54,7 +54,7 @@ def create_app():
     # Register auth related routes.
     app.register_blueprint(auth.bp)
 
-    # Register todos related routes.
-    app.register_blueprint(todos.bp)
+    # Register location related routes.
+    app.register_blueprint(location.bp)
 
     return app

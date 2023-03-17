@@ -3,7 +3,7 @@ from flaskr import db
 from flask import Blueprint, jsonify, request, abort
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
-bp = Blueprint('location', __name__, url_prefix='/update')
+bp = Blueprint('location', __name__, url_prefix='/location')
 
 
 @bp.route('/update', methods=['POST'])
@@ -31,14 +31,10 @@ def update():
 @bp.route('/neighbors', methods=['GET'])
 @jwt_required()
 def neighbors():
-    """Update the location of a user"""
-    request_json = request.get_json()
-    if not request_json:
-        abort(400, {'error': 'no JSON data in the request'})
-
+    """Gets the neighbors corresponding to a user"""
     # Filter other user's by the current user's coordinates.
     current_user_id = get_jwt_identity()
-    users = AppUser.query.filter_by(
-        coordinates=current_user_id.coordinates).all()
-    neighbors_of_current_user = [user.coordinates for user in users]
+    current_user = AppUser.query.filter_by(id=current_user_id).first()
+    users = AppUser.query.filter_by(coordinates=current_user.coordinates).all()
+    neighbors_of_current_user = [user.username for user in users]
     return jsonify({'neighbors': neighbors_of_current_user})
